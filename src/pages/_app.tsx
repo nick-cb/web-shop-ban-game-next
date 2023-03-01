@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [loginToken, setLoginToken] = useState<string | null>(null);
   const [mode, setMode] = useState<PaletteMode>("dark");
 
-  const {pathname} = useRouter();
+  const {asPath} = useRouter();
 
   const theme = React.useMemo(() => createTheme(getTheme(mode)), [mode]);
   const colorMode = React.useMemo(
@@ -57,8 +57,8 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [verifyUser]);
 
   useEffect(() => {
-    ReactGA.pageview(pathname);
-  }, [pathname])
+    ReactGA.pageview(asPath);
+  }, [asPath])
 
   return (
     <GlobalContext.Provider
