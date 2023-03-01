@@ -16,20 +16,20 @@ const EmailStrategy: React.FC<{ preview?: boolean }> = ({
   });
   const [password, setPassword, passwordValidation] = useInputValidation();
 
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (disabled) {
       return;
     }
 
-    await axios
+    axios
       .post(`${API_URL}/api/users/login`, {
         email,
         password,
       })
-      .then(({status}) => {
-        if(status === 200){
-          window.location.href="/"
+      .then(({ status }) => {
+        if (status === 200) {
+          window.location.href = "/homepage";
         }
       });
     // const { token } = data;
