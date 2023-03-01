@@ -8,11 +8,16 @@ import Header from "../components/header";
 import { getTheme } from "../hooks/useThem";
 import Page from "../components/page";
 import { API_URL } from "@/utils/config";
+import ReactGA from 'react-ga';
+import { useRouter } from "next/router";
 
+ReactGA.initialize('UA-257495971-2');
 export const GlobalContext = createContext<any>(null);
 export default function App({ Component, pageProps }: AppProps) {
   const [loginToken, setLoginToken] = useState<string | null>(null);
   const [mode, setMode] = useState<PaletteMode>("dark");
+
+  const {pathname} = useRouter();
 
   const theme = React.useMemo(() => createTheme(getTheme(mode)), [mode]);
   const colorMode = React.useMemo(
@@ -50,6 +55,10 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     verifyUser();
   }, [verifyUser]);
+
+  useEffect(() => {
+    ReactGA.pageview(pathname);
+  }, [pathname])
 
   return (
     <GlobalContext.Provider
