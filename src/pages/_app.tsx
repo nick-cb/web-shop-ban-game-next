@@ -11,12 +11,6 @@ import { API_URL } from "@/utils/config";
 import ReactGA from "react-ga";
 import { useRouter } from "next/router";
 
-ReactGA.initialize("UA-257495971-2", {
-  standardImplementation: true,
-  // gaOptions: {
-  //   siteSpeedSampleRate: 100,
-  // },
-});
 export const GlobalContext = createContext<any>(null);
 export default function App({ Component, pageProps }: AppProps) {
   const [loginToken, setLoginToken] = useState<string | null>(null);
@@ -62,6 +56,9 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [verifyUser]);
 
   useEffect(() => {
+    ReactGA.initialize("UA-257495971-2", {
+      standardImplementation: true,
+    });
     console.log({ asPath });
     if (typeof window !== "undefined") {
       ReactGA.pageview(window.location.pathname + window.location.search);
