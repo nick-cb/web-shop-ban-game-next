@@ -1,6 +1,71 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import "@/styles/index.scss";
+import { createTheme, PaletteMode } from "@mui/material";
+import { ThemeProvider } from "@mui/system";
+import axios from "axios";
+import type { AppProps } from "next/app";
+import React, { createContext, useCallback, useEffect, useState } from "react";
+import Header from "../components/header";
+import { getTheme } from "../hooks/useThem";
+import Page from "../components/page";
+import { API_URL } from "@/utils/config";
 
+export const GlobalContext = createContext<any>(null);
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  const [loginToken, setLoginToken] = useState<string | null>(null);
+  const [mode, setMode] = useState<PaletteMode>("dark");
+
+  const theme = React.useMemo(() => createTheme(getTheme(mode)), [mode]);
+  const colorMode = React.useMemo(
+    () => ({
+      // The dark mode switch would invoke this method
+      toggleColorMode: () => {
+        setMode((prevMode: PaletteMode) =>
+          prevMode === "light" ? "dark" : "light"
+        );
+      },
+    }),
+    []
+  );
+
+  const verifyUser = useCallback(async () => {
+    const { data } = await axios.post(
+      `${API_URL}/api/users/token/refresh`,
+      null,
+      {
+        withCredentials: true,
+      }
+    );
+    if (data && data.token) {
+      setLoginToken(data.token);
+    } else {
+      setLoginToken(null);
+    }
+    setTimeout(verifyUser, 5 * 60 * 1000);
+  }, [setLoginToken]);
+
+  // useEffect(() => {
+  //   setMode(prefersDarkMode ? "dark" : "light");
+  // }, [prefersDarkMode]);
+
+  useEffect(() => {
+    verifyUser();
+  }, [verifyUser]);
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        colorMode,
+        mode,
+        loginToken,
+        setLoginToken,
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Page>
+          <Component {...pageProps} />
+        </Page>
+      </ThemeProvider>
+    </GlobalContext.Provider>
+  );
 }
