@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 
 ReactGA.initialize("UA-257495971-2", {
   standardImplementation: true,
+  gaOptions: {
+    siteSpeedSampleRate: 100,
+  },
 });
 export const GlobalContext = createContext<any>(null);
 export default function App({ Component, pageProps }: AppProps) {
