@@ -58,10 +58,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     console.log({ asPath });
-    if (window) {
+    if (typeof window !== 'undefined') {
       ReactGA.pageview(window.location.pathname + window.location.search);
     }
-  }, [asPath, window]);
+  }, [asPath]);
 
   return (
     <GlobalContext.Provider
