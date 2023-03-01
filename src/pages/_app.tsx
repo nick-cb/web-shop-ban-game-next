@@ -8,16 +8,16 @@ import Header from "../components/header";
 import { getTheme } from "../hooks/useThem";
 import Page from "../components/page";
 import { API_URL } from "@/utils/config";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 import { useRouter } from "next/router";
 
-ReactGA.initialize('UA-257495971-2');
+ReactGA.initialize("UA-257495971-2");
 export const GlobalContext = createContext<any>(null);
 export default function App({ Component, pageProps }: AppProps) {
   const [loginToken, setLoginToken] = useState<string | null>(null);
   const [mode, setMode] = useState<PaletteMode>("dark");
 
-  const {asPath} = useRouter();
+  const { asPath } = useRouter();
 
   const theme = React.useMemo(() => createTheme(getTheme(mode)), [mode]);
   const colorMode = React.useMemo(
@@ -42,6 +42,15 @@ export default function App({ Component, pageProps }: AppProps) {
     );
     if (data && data.token) {
       setLoginToken(data.token);
+      // const { data: profile } = await axios.post(
+      //   "http://localhost:5000/api/users/details",
+      //   null,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${data.token}`,
+      //     },
+      //   }
+      // );
     } else {
       setLoginToken(null);
     }
@@ -58,7 +67,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     ReactGA.pageview(asPath);
-  }, [asPath])
+
+    ReactGA.plugin.require("localHitSender", { path: asPath, debug: true });
+  }, [asPath]);
 
   return (
     <GlobalContext.Provider
