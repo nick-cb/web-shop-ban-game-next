@@ -72,7 +72,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [verifyUser]);
 
   useEffect(() => {
-    console.log("RUN");
+    console.log({asPath});
     ReactGA.pageview(asPath);
     ReactGA.plugin.require("localHitSender", { path: asPath, debug: true });
   }, [asPath]);
