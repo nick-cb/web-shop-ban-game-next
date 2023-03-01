@@ -23,10 +23,16 @@ const EmailStrategy: React.FC<{ preview?: boolean }> = ({
     }
 
     axios
-      .post(`${API_URL}/api/users/login`, {
-        email,
-        password,
-      })
+      .post(
+        `${API_URL}/api/users/login`,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then(({ status }) => {
         if (status === 200) {
           window.location.href = "/homepage";
