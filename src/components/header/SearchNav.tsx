@@ -11,6 +11,7 @@ import AccountMenu from "./AccountMenu";
 import SearchMenu from "./SearchMenu";
 import { useRouter } from "next/router";
 import ShoppingCartBadge from "./ShoppingCartBadge";
+import ReactGA from "react-ga";
 
 export default function SearchNav() {
   const [open, setOpen] = useState(false);
@@ -71,6 +72,7 @@ export default function SearchNav() {
                 color="inherit"
                 aria-label="open drawer"
                 onClick={() => {
+                  ReactGA.modalview("login");
                   return !loginToken ? setOpen(true) : null;
                 }}
               >
