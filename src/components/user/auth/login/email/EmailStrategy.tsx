@@ -5,6 +5,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import Email from "../../../../form/Email";
 import Password from "../../../../form/Password";
 import { useInputValidation } from "../../../../../hooks/useFormValidation";
+import { API_URL } from "@/utils/config";
 
 const EmailStrategy: React.FC<{ preview?: boolean }> = ({
   preview = false,
@@ -22,7 +23,7 @@ const EmailStrategy: React.FC<{ preview?: boolean }> = ({
     }
 
     await axios
-      .post("http://localhost:5000/api/users/login", {
+      .post(`${API_URL}/api/users/login`, {
         email,
         password,
       })
