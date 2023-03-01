@@ -42,15 +42,21 @@ export default function App({ Component, pageProps }: AppProps) {
     );
     if (data && data.token) {
       setLoginToken(data.token);
-      // const { data: profile } = await axios.post(
-      //   "http://localhost:5000/api/users/details",
-      //   null,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${data.token}`,
-      //     },
-      //   }
-      // );
+      const { data: profile } = await axios.post(
+        "http://localhost:5000/api/users/details",
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        }
+      );
+      ReactGA.ga("create", {
+        trackingId: "UA-257495971-2",
+        cookiDomain: "auto",
+        userId: profile?.id,
+        email: profile?.email,
+      });
     } else {
       setLoginToken(null);
     }
@@ -67,7 +73,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     ReactGA.pageview(asPath);
-
     ReactGA.plugin.require("localHitSender", { path: asPath, debug: true });
   }, [asPath]);
 
